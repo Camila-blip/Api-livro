@@ -1,23 +1,18 @@
 import express from "express";
-import { livroModel } from "./models/Livro.model.js";
+import { livrosModel } from "./models/Livro.model.js";
+import LivrosController from "./controllers/livros.controller.js";
 const app = express();
 app.use(express.json());
 
 app.get("/livros", async (req, res) => {
-    try {
-        const response = await livroModel.find().lean();
-        res.status(200).json(response);
-    } catch (error) {
-        console.log("error", error);
-        res.status(400).send("Erro get livro");
-    }
+    listarLivros();
 });
 
 app.get("/livros/:id", (req, res) => {
     try {
         const index = buscaLivro(req.params.id);
 
-        res.status(200).json(livroModel[index]);
+        res.status(200).json(livrosModel[index]);
     } catch (error) {
         console.log("error", error);
         res.status(400).send("Erro get id");
@@ -26,7 +21,7 @@ app.get("/livros/:id", (req, res) => {
 
 app.post("/livros", (req, res) => {
     try {
-        livroModel.push(req.body);
+        livrosModel.push(req.body);
         res.status(200).send("Livro foi cadastrado com sucesso");
     } catch (error) {
         res.status(400).send("Erro post");
@@ -39,9 +34,9 @@ app.put("/livros/:id", (req, res) => {
         const { titulo } = req.body;
 
         const index = buscaLivro(id);
-        livroModel[index].titulo = titulo;
+        livrosModel[index].titulo = titulo;
 
-        res.status(200).json(livroModel);
+        res.status(200).json(livrosModel);
     } catch (error) {
         res.status(400).send("Erro put");
     }
@@ -52,7 +47,7 @@ app.delete("/livros/:id", (req, res) => {
         const { id } = req.params;
 
         const index = buscaLivro(id);
-        livroModel.splice(index, 1);
+        livrosModel.splice(index, 1);
 
         res.status(200).send(`Livro ${id} removido com sucesso!`);
     } catch (error) {
@@ -63,7 +58,7 @@ app.delete("/livros/:id", (req, res) => {
 
 function buscaLivro(id) {
     try {
-        return livroModel.findIndex((livro) => livro.id == id);
+        return livrosModel.findIndex((livro) => livro.id == id);
     } catch (error) {
         console.log("aqui,erro");
     }
