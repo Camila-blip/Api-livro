@@ -1,9 +1,6 @@
-import express from "express";
-var router = express.Router();
+import livrosRoutes from "./livros.routes";
+const BASE_URL = "/api";
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
-});
-
-module.exports = router;
+export default function routes(app) {
+    app.use(`${BASE_URL}/livros`, livrosRoutes);
+}
