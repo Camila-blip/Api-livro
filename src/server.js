@@ -1,12 +1,17 @@
+import express from "express";
 import "dotenv/config";
-import app from "./src/app.js";
 import bodyParser from "body-parser";
-import "./src/config/dbConnect.js";
+import "./config/dbConnect.js";
+import routes from "./routes/index.js";
 
+const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-console.log("process.env.PORT", process.env.PORT);
+app.use(express.json());
+
 const port = process.env.PORT || 3000;
+
+routes(app);
 
 app.listen(port, () => {
     console.log(`Port run ${port}`);
