@@ -1,15 +1,16 @@
 import express from "express";
-import LivrosController from "../controllers/livros.controller";
+import LivrosController from "../controllers/livros.controller.js";
 
 const Controller = new LivrosController();
-
 export default express()
-    .get("/livros", Controller.listarLivros())
+    .get("/", Controller.listarLivros)
 
-    .get("/livros/:id", Controller.getByLivro())
+    .get("/busca", Controller.listarLivroPorEditora)
 
-    .post("/livros", Controller.postLivros())
+    .get("/:id", Controller.getByLivro)
 
-    .put("/livros/:id", Controller.putLivros())
+    .post("/", Controller.postLivros)
 
-    .delete("/livros/:id", Controller.deleteLivros());
+    .put("/:id", Controller.putLivros)
+
+    .delete("/:id", Controller.deleteLivros);

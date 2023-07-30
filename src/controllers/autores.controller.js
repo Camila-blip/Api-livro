@@ -1,32 +1,35 @@
-import { autoresModel } from "./models/auto.model.js";
+import { autoresModel } from "../models/Autor.model.js";
 
-export default class AutorController {
+export default class AutoresController {
     async listarAutores(req, res) {
         try {
             const response = await autoresModel.find().lean();
             return res.status(200).json(response);
         } catch (error) {
-            console.log("error", error);
-            return res.status(400).send({message: "Erro na consulta do autor"});
+            return res
+                .status(400)
+                .send({ message: "Erro na consulta do autor" });
         }
     }
 
-    async getByAutor(req, res){
+    async getByAutor(req, res) {
         try {
-           const {id} = req.params;
+            const { id } = req.params;
             const response = await autoresModel.findById(id);
             res.status(200).json(response);
         } catch (error) {
-            res.status(400).send({message: "Erro na consulta do autor"});
+            res.status(400).send({ message: "Erro na consulta do autor" });
         }
     }
 
-    async postAutores(req, res){
+    async postAutores(req, res) {
         try {
             await autoresModel.create(req.body);
-            res.status(200).send({message: "Autor cadastrado com sucesso!"});
+            res.status(200).send({ message: "Autor cadastrado com sucesso!" });
         } catch (error) {
-            res.status(400).send({message: "Erro ao tentar cadastrar um autor"});
+            res.status(400).send({
+                message: "Erro ao tentar cadastrar um autor",
+            });
         }
     }
 
@@ -34,15 +37,15 @@ export default class AutorController {
         try {
             const { id } = req.params;
 
-            autoresModel.findByIdAndUpdate(id,{$set: req.body}, (err)=>{
-                if(err){
-                    res.status(500).send({message:err.message});
-                }else{
-                    res.status(200).send({message: "Autor atualizado com sucesso!"});
-                }
+            await autoresModel.findByIdAndUpdate(id, { $set: req.body });
+
+            res.status(200).send({
+                message: "Autor atualizado com sucesso!",
             });
         } catch (error) {
-            res.status(400).send({message: "Erro ao tentar atualizar o autor"});
+            res.status(400).send({
+                message: "Erro ao tentar atualizar o autor",
+            });
         }
     }
 
@@ -50,12 +53,14 @@ export default class AutorController {
         try {
             const { id } = req.params;
 
-            autoresModel.findByIdAndDelete(id);
+            await autoresModel.findByIdAndDelete(id);
 
-            res.status(200).send(`Autor ${id} removido com sucesso!`);
+            res.status(200).send({
+                message: `Autor ${id} removido com sucesso!`,
+            });
         } catch (error) {
             console.log("error", error);
-            res.status(400).send("Erro put");
+            res.status(400).send({ message: "Erro ao deletar o autor" });
         }
     }
 }
